@@ -12,9 +12,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import com.spring.ecom_project.model.Product;
 import com.spring.ecom_project.services.ProductService;
+import com.spring.ecom_project.model.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -24,14 +26,15 @@ public class ProductController {
     @Autowired
     private ProductService service;
 
-    @RequestMapping("/")
+    @RequestMapping(value = {"", "/"})
     public String greet() {
         return "Hello Customers";
     }
 
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getAllProducts() {
-        return new ResponseEntity<>(service.getAllProducts(), HttpStatus.OK);
+    public ResponseEntity<Page<Product>> getAllProducts(
+            @PageableDefault(size = 10, sort = "id") Pageable pageable) {
+        return new ResponseEntity<>(service.getAllProducts(pageable), HttpStatus.OK);
     }
 
     @GetMapping("/products/{id}")
@@ -39,7 +42,6 @@ public class ProductController {
         Product product = service.getProductById(id);
 
         if (product != null) {
-            // Ensure full image URL
             product.setImageUrl(product.getImageUrl());
             return new ResponseEntity<>(product, HttpStatus.OK);
         } else {
@@ -58,7 +60,6 @@ public class ProductController {
                 return ResponseEntity.notFound().build();
             }
 
-            // Determine content type dynamically
             String contentType = filename.endsWith(".png") ? "image/png" :
                                  filename.endsWith(".jpg") || filename.endsWith(".jpeg") ? "image/jpeg" :
                                  "application/octet-stream";
