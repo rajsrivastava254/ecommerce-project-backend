@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.spring.ecom_project.model.Product;
 import com.spring.ecom_project.repository.ProductRepo;
@@ -19,17 +22,79 @@ public class ProductService {
 
     private static final String IMAGE_BASE_URL = "http://localhost:8080/api/images/";
 
-    public List<Product> getAllProducts() {
-        return repo.findAll().stream()
-                .map(this::updateImageUrl)
-                .collect(Collectors.toList());
+    public Page<Product> getAllProducts(Pageable pageable) {
+        return repo.findAll(pageable).map(this::updateImageUrl);
     }
 
     public Product getProductById(Long id) {
         Product product = repo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product Not Found"));
+        return toDTO(product);
+    }
 
-        return updateImageUrl(product);
+    @Transactional
+    public Product createProduct(Product dto) {
+        Product product = toEntity(dto);
+        // id should not be set for new product
+        product.setId(0);
+        Product saved = repo.save(product);
+        return toDTO(saved);
+    }
+
+    @Transactional
+    public Product updateProduct(Long id, Product dto) {
+        Product existing = repo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product Not Found"));
+        // Update fields
+        existing.setName(dto.getName());
+        existing.setDescription(dto.getDescription());
+        existing.setBrand(dto.getBrand());
+        existing.setCategory(dto.getCategory());
+        existing.setPrice(dto.getPrice());
+        existing.setImageUrl(dto.getImageUrl());
+        existing.setRelease_date(dto.getRelease_date());
+        existing.setAvailability(dto.getAvailability() != null ? dto.getAvailability() : false);
+        existing.setQuantity(dto.getQuantity());
+        Product saved = repo.save(existing);
+        return toDTO(saved);
+    }
+
+    @Transactional
+    public void deleteProduct(Long id) {
+        if (!repo.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product Not Found");
+        }
+        repo.deleteById(id);
+    }
+
+    private Product toDTO(Product product) {
+        return new Product(
+            product.getId(),
+            product.getName(),
+            product.getDescription(),
+            product.getBrand(),
+            product.getCategory(),
+            product.getPrice(),
+            updateImageUrl(product).getImageUrl(),
+            product.getRelease_date(),
+            product.getAvailability(),
+            product.getQuantity()
+        );
+    }
+
+    private Product toEntity(Product dto) {
+        return new Product(
+            dto.getId(),
+            dto.getName(),
+            dto.getDescription(),
+            dto.getBrand(),
+            dto.getCategory(),
+            dto.getPrice(),
+            dto.getImageUrl(),
+            dto.getRelease_date(),
+            dto.getAvailability() != null ? dto.getAvailability() : false,
+            dto.getQuantity()
+        );
     }
 
     private Product updateImageUrl(Product product) {
