@@ -38,7 +38,10 @@ public class WebConfig implements WebMvcConfigurer {
         http
             .csrf().disable()
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/products", "/api/products/*", "/api/images/**").permitAll()
+                .requestMatchers(
+                    "/api/products", "/api/products/*", "/api/images/**",
+                    "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html"
+                ).permitAll()
                 .anyRequest().authenticated()
             )
             .httpBasic();
