@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
-// @RestControllerAdvice(basePackages = "com.spring.ecom_project")
+@RestControllerAdvice(basePackages = "com.spring.ecom_project")
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -30,12 +30,4 @@ public class GlobalExceptionHandler {
         error.put("error", ex.getReason());
         return new ResponseEntity<>(error, ex.getStatusCode());
     }
-
-    // Optionally, remove or comment out the generic Exception handler to avoid masking errors
-    // @ExceptionHandler(Exception.class)
-    // public ResponseEntity<Map<String, String>> handleGenericException(Exception ex) {
-    //     Map<String, String> error = new HashMap<>();
-    //     error.put("error", "An unexpected error occurred");
-    //     return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
-    // }
 } 

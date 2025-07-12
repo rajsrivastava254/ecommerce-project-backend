@@ -1,7 +1,6 @@
 package com.spring.ecom_project.services;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,11 +31,37 @@ public class ProductService {
         return toDTO(product);
     }
 
+    // Search methods
+    public Page<Product> searchByName(String name, Pageable pageable) {
+        return repo.findByNameContainingIgnoreCase(name, pageable).map(this::updateImageUrl);
+    }
+
+    public Page<Product> searchByCategory(String category, Pageable pageable) {
+        return repo.findByCategory(category, pageable).map(this::updateImageUrl);
+    }
+
+    public Page<Product> searchByBrand(String brand, Pageable pageable) {
+        return repo.findByBrand(brand, pageable).map(this::updateImageUrl);
+    }
+
+    public Page<Product> searchByPriceRange(BigDecimal minPrice, BigDecimal maxPrice, Pageable pageable) {
+        return repo.findByPriceBetween(minPrice, maxPrice, pageable).map(this::updateImageUrl);
+    }
+
+    public Page<Product> searchByAvailability(Boolean availability, Pageable pageable) {
+        return repo.findByAvailability(availability, pageable).map(this::updateImageUrl);
+    }
+
+    public Page<Product> advancedSearch(String name, String category, BigDecimal minPrice, BigDecimal maxPrice, Pageable pageable) {
+        return repo.findByNameContainingIgnoreCaseAndCategoryAndPriceBetween(name, category, minPrice, maxPrice, pageable)
+                .map(this::updateImageUrl);
+    }
+
     @Transactional
     public Product createProduct(Product dto) {
         Product product = toEntity(dto);
         // id should not be set for new product
-        product.setId(0);
+        product.setId(null);
         Product saved = repo.save(product);
         return toDTO(saved);
     }
