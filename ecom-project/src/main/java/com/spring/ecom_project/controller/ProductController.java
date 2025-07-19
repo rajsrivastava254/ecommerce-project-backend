@@ -1,12 +1,9 @@
 package com.spring.ecom_project.controller;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
