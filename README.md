@@ -85,8 +85,3 @@ Copy
 Edit
 
 ---
-
-Let me know if:
-- You want to include Swagger/OpenAPI docs.
-- You want to add frontend details too (if any).
-- You want a badge-style header (build passing, Java version, etc).
