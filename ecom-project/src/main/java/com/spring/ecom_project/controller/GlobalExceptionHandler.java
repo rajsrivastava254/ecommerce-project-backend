@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 
+import jakarta.servlet.ServletException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,8 +38,26 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<Map<String, String>> handleNotFound(NoHandlerFoundException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("error", "Resource not found");
+        error.put("error", "Endpoint is not valid. Move to another endpoint.");
         error.put("path", ex.getRequestURL());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+    public ResponseEntity<Map<String, String>> handleMethodNotSupported(HttpRequestMethodNotSupportedException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", "HTTP method not supported for this endpoint.");
+        error.put("method", ex.getMethod());
+        error.put("supportedMethods", String.join(", ", ex.getSupportedMethods()));
+        return new ResponseEntity<>(error, HttpStatus.METHOD_NOT_ALLOWED);
+    }
+
+    @ExceptionHandler(ServletException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<Map<String, String>> handleServletException(ServletException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", "Endpoint is not valid. Move to another endpoint.");
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
