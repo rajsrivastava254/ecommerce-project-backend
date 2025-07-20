@@ -19,11 +19,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.*;
-import org.springframework.lang.NonNull;
-
 import com.spring.ecom_project.security.JwtAuthenticationFilter;
-
 import java.util.Arrays;
+import org.springframework.lang.NonNull;
 
 @Configuration
 @EnableWebSecurity
@@ -76,7 +74,8 @@ public class WebConfig implements WebMvcConfigurer {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .authenticationProvider(authenticationProvider())
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+            .headers(headers -> headers.frameOptions().disable());
         
         return http.build();
     }
