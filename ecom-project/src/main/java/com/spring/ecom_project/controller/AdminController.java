@@ -1,6 +1,5 @@
 package com.spring.ecom_project.controller;
 
-import com.spring.ecom_project.model.Product;
 import com.spring.ecom_project.services.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
