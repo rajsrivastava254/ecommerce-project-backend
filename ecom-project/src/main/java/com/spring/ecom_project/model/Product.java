@@ -48,11 +48,12 @@ public class Product {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @NotNull(message = "Release date is required")
-    private Date release_date;
+    private Date releaseDate;
 
     @NotNull(message = "Availability is required")
     private Boolean availability;
 
     @Min(value = 0, message = "Quantity cannot be negative")
     private int quantity;
+
 } 

@@ -60,8 +60,7 @@ public class ProductService {
     @Transactional
     public Product createProduct(Product dto) {
         Product product = toEntity(dto);
-        // id should not be set for new product
-        product.setId(null);
+        // id should not be set for new product; JPA will handle it
         Product saved = repo.save(product);
         return toDTO(saved);
     }
@@ -77,7 +76,7 @@ public class ProductService {
         existing.setCategory(dto.getCategory());
         existing.setPrice(dto.getPrice());
         existing.setImageUrl(dto.getImageUrl());
-        existing.setRelease_date(dto.getRelease_date());
+        existing.setReleaseDate(dto.getReleaseDate());
         existing.setAvailability(dto.getAvailability() != null ? dto.getAvailability() : false);
         existing.setQuantity(dto.getQuantity());
         Product saved = repo.save(existing);
@@ -101,7 +100,7 @@ public class ProductService {
             product.getCategory(),
             product.getPrice(),
             updateImageUrl(product).getImageUrl(),
-            product.getRelease_date(),
+            product.getReleaseDate(),
             product.getAvailability(),
             product.getQuantity()
         );
@@ -116,7 +115,7 @@ public class ProductService {
             dto.getCategory(),
             dto.getPrice(),
             dto.getImageUrl(),
-            dto.getRelease_date(),
+            dto.getReleaseDate(),
             dto.getAvailability() != null ? dto.getAvailability() : false,
             dto.getQuantity()
         );
