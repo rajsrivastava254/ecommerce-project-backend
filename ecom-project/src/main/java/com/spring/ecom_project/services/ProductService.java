@@ -19,7 +19,7 @@ public class ProductService {
     @Autowired
     private ProductRepo repo;
 
-    private static final String IMAGE_BASE_URL = "http://localhost:8080/api/images/";
+    private static final String IMAGE_BASE_URL = "https://ecommerce-project-backend-z4ut.onrender.com/api/images/";
 
     public Page<Product> getAllProducts(Pageable pageable) {
         return repo.findAll(pageable).map(this::updateImageUrl);
@@ -127,4 +127,5 @@ public class ProductService {
         }
         return product;
     }
+
 }
