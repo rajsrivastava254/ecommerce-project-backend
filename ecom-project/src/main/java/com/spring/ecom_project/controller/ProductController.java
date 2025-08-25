@@ -21,7 +21,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://ecommerce-project-frontend-254.vercel.app")
 @RequestMapping("/api")
 @Tag(name = "Product Management", description = "APIs for managing products")
 public class ProductController {
@@ -133,3 +133,4 @@ public class ProductController {
         }
     }
 }
+
