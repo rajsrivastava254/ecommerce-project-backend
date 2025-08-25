@@ -30,7 +30,8 @@ public class WebConfig implements WebMvcConfigurer {
             public void addCorsMappings(@NonNull CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins("https://ecommerce-project-frontend-254.vercel.app") // Allow frontend requests
-                        .allowedMethods("GET", "POST", "PUT", "DELETE");
+                        .allowedMethods("GET", "POST", "PUT", "DELETE")
+                        .allowedHeaders("*");
             }
         };
     }
@@ -70,4 +71,5 @@ public class WebConfig implements WebMvcConfigurer {
         return new BCryptPasswordEncoder();
     }
 }
+
 
