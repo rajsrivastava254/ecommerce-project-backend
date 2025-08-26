@@ -33,10 +33,12 @@ Java 21
 
 Maven
 
+Lombok
+
 Steps to Run
 bash
 # Clone the repository
-git clone https://github.com/your-username/ecommerce-project-backend.git
+git clone https://github.com/rajsrivastava254/ecommerce-project-backend.git
 
 # Navigate into the project directory
 cd ecommerce-project-backend
